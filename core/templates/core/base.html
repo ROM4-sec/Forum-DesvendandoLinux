@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Linux Forum{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">🐧 DesvendandoLinux</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <div class="ms-auto d-flex align-items-center mt-3 mt-lg-0">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'perfil' %}" class="text-decoration-none text-light me-3">
+                            Olá, <strong>{{ user.username }}</strong>
+                        </a>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Sair</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-sm btn-outline-light me-2">Entrar</a>
+                        <a href="{% url 'registrar' %}" class="btn btn-sm btn-primary">Cadastrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow-1">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="bg-dark text-light text-center py-3 mt-auto">
+        <div class="container">
+            <small>&copy; 2023 Linux Forum Project. Desenvolvido com Django.</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

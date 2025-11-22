@@ -1,0 +1,15 @@
+# Arquivos do sistema e IDE
+__pycache__/
+*.py[cod]
+.vscode/
+
+# Banco de dados (não subimos o local para produção)
+db.sqlite3
+
+# Ambiente Virtual (nunca suba isso!)
+.venv/
+env/
+venv/
+
+# Mídia (uploads locais de teste)
+media/

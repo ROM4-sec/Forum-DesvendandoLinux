@@ -1,0 +1,83 @@
+{% load static markdown_extras %} <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ topico.titulo }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">⬅ Voltar para Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h1 class="h3">{{ topico.titulo }}</h1>
+                        <small class="text-muted">
+                            Por <strong>{{ topico.autor.username }}</strong> em {{ topico.data_criacao|date:"d/m/Y H:i" }}
+                            na categoria <span class="badge bg-primary">{{ topico.categoria.nome }}</span>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            {{ topico.conteudo | convert_markdown }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mb-3">Respostas ({{ topico.respostas.count }})</h4>
+
+                {% for resposta in topico.respostas.all %}
+                <div class="d-flex align-items-center mb-2">
+                    <a href="{% url 'perfil_publico' resposta.autor.username %}" class="text-decoration-none">
+                        <img src="{% static 'img/avatars/'|add:resposta.autor.profile.avatar %}" 
+                            alt="Avatar" 
+                            class="rounded-circle border me-2"
+                            style="width: 40px; height: 40px; object-fit: cover;">
+                    </a>
+
+                    <div>
+                        <a href="{% url 'perfil_publico' resposta.autor.username %}" class="fw-bold text-dark text-decoration-none">
+                            {{ resposta.autor.username }}
+                        </a>
+                        <small class="text-muted d-block" style="font-size: 0.8rem;">
+                            {{ resposta.data_criacao|date:"d/m/Y H:i" }}
+                        </small>
+                    </div>
+                </div>
+                <p>{{ resposta.conteudo }}</p>
+                {% empty %}
+                <p class="text-muted">Ninguém respondeu ainda. Seja o primeiro!</p>
+                {% endfor %}
+                
+                <hr class="my-4">
+
+                <h5 class="mb-3">Deixe sua resposta</h5>
+
+                {% if user.is_authenticated %}
+                    <form method="post">
+                        {% csrf_token  %} <div class="mb-3">
+                            {{ form.conteudo }}
+                        </div>
+                        <button type='submit' class='btn btn-primary'>Enviar Resposta</button>
+                    </form>
+
+                {% else  %}
+                    <div class="alert alert-warning">
+                        Você precisa fazer <a href="/admin/">login</a> para responder.
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
