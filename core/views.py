@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import RespostaForm, RegristrarUsuarioForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .forms import RespostaForm, ProfileForm#, RegistrarUsuarioForm
+from .forms import RespostaForm, ProfileForm, ProfileForm, TopicoForm#, RegistrarUsuarioForm
 
 # Create your views here.
 
@@ -87,3 +87,17 @@ def editar_perfil(request):
         form = ProfileForm(instance=profile)
         
     return render(request, 'core/editar_perfil.html', {'form':form})
+
+@login_required
+def criar_topico(request):
+    if request.method == 'POST':
+        form = TopicoForm(request.POST)
+        if form.is_valid():
+            topico = form.save(commit=False)
+            topico.autor = request.user
+            topico.save()
+            return redirect('topico_detail', id=topico.id)
+    else:
+        form = TopicoForm()
+        
+    return render(request, 'core/criar_topico.html', {'form':form})

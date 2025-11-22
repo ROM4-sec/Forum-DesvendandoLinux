@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Resposta, Profile
+from .models import Resposta, Profile, Topico
 
 class RespostaForm(forms.ModelForm):
     class Meta:
@@ -42,3 +42,13 @@ class ProfileForm(forms.ModelForm):
             'github':forms.TextInput(attrs={'class': 'form-control'}),
             'avatar':forms.Select(attrs={'class': 'form-select'}),
         }
+        
+class TopicoForm(forms.ModelForm):
+    class Meta:
+            model = Topico 
+            fields = ['titulo', 'categoria', 'conteudo']
+            widgets = {
+                'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Como instalar Drivers Nvidia?'}), 
+                'categoria':forms.Select(attrs={'class': 'form-select'}), 
+                'conteudo':forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Escreva sua dúvida ou dica aqui (aceita Markdown!)...'}), 
+            }

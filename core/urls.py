@@ -8,5 +8,6 @@ urlpatterns = [
     path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
     path('perfil/<str:username>/', views.perfil_view, name='perfil_publico'),
     path('perfil/', views.perfil_view, name='perfil'), #atalho para 'meu perfil'
+    path('topico/criar/', views.criar_topico, name='criar_topico'),
     
 ]
